@@ -27,7 +27,7 @@ jobs:
             set -e
             cd "${{ secrets.EC2_PROJECT_DIR }}"
             # pull latest code
-            git pull origin main
+            git pull origin master
             # activate venv and install any new deps
             source venv/bin/activate
             pip install -r requirements.txt
