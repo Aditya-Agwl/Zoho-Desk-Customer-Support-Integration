@@ -143,7 +143,7 @@ def add_attachments_to_ticket(ticket_id: str, files: List[UploadFile]):
     headers = {
         "Authorization": f"Zoho-oauthtoken {token}",
         "orgId": ZOHO_ORG_ID,
-        # Do not set Content-Type manually; requests will set multipart boundary
+        # Do not set Content-Type manually; requests will set multipart boundaries
     }
 
     for f in files:
@@ -158,7 +158,7 @@ def add_attachments_to_ticket(ticket_id: str, files: List[UploadFile]):
         resp = requests.post(url, headers=headers, files=files_payload)
         if resp.status_code not in (200, 201):
             # Log but don't hard-fail ticket creation
-            print(f"[WARN] Failed to attach file {f.filename}: {resp.status_code} {resp.text}")
+            print(f"[WARN] Failed to attach this file {f.filename}: {resp.status_code} {resp.text}")
 
 
 @app.get("/", response_class=HTMLResponse)
