@@ -1,0 +1,35 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - master   # or master, depending on your repo
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Deploy to EC2
+        run: |
+          ssh "${{ secrets.EC2_USER }}"@"${{ secrets.EC2_HOST }}" << 'EOF'
+            set -e
+            cd "${{ secrets.EC2_PROJECT_DIR }}"
+            # pull latest code
+            git pull origin main
+            # activate venv and install any new deps
+            source venv/bin/activate
+            pip install -r requirements.txt
+            # restart the service
+            sudo systemctl restart "${{ secrets.EC2_SERVICE_NAME }}"
+          EOF
