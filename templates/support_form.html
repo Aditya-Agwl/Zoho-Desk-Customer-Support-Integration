@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Neurasics Support</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg-light: #f5f5f5;
+      --card-bg: #ffffff;
+      --text-main: #111111;
+      --text-muted: #666666;
+      --border-soft: #e0e0e0;
+      --gold: #d4af37;
+      --gold-dark: #b89121;
+      --error: #e63946;
+      --success: #2a9d8f;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top left, #fdf6e3, #f5f5f5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      color: var(--text-main);
+    }
+
+    .support-wrapper {
+      width: 100%;
+      max-width: 960px;
+    }
+
+    .support-card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.08),
+        0 0 0 1px rgba(0, 0, 0, 0.02);
+      padding: 24px 24px 20px;
+      border-top: 4px solid var(--gold);
+    }
+
+    .support-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .support-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .support-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      max-width: 440px;
+    }
+
+    .support-badge {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .support-badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr);
+      gap: 18px 24px;
+    }
+
+    @media (max-width: 768px) {
+      form {
+        grid-template-columns: 1fr;
+      }
+
+      .support-card {
+        padding: 18px 16px 16px;
+      }
+
+      .support-header {
+        flex-direction: column;
+      }
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .field-group-half {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+    }
+
+    .field-hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .required-dot {
+      color: var(--gold);
+      margin-left: 4px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    select,
+    textarea {
+      border-radius: 10px;
+      border: 1px solid var(--border-soft);
+      padding: 9px 11px;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+      background: #fafafa;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.18);
+      background: #ffffff;
+    }
+
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    .pill-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .pill {
+      font-size: 0.75rem;
+      border-radius: 999px;
+      padding: 4px 10px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      color: var(--text-muted);
+      background: #fafafa;
+    }
+
+    .pill-strong {
+      border-color: rgba(212, 175, 55, 0.4);
+      color: #000;
+    }
+
+    .file-drop {
+      border-radius: 12px;
+      border: 1px dashed rgba(0, 0, 0, 0.22);
+      padding: 10px 11px;
+      background: #fafafa;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: border-color 0.16s ease, background 0.16s ease;
+    }
+
+    .file-drop:hover {
+      border-color: var(--gold);
+      background: #ffffff;
+    }
+
+    .file-drop-title {
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .file-drop-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .file-list {
+      margin-top: 4px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .footer-row {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+
+    .status-text {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .status-text strong {
+      color: var(--gold-dark);
+    }
+
+    .btn-primary {
+      border: none;
+      cursor: pointer;
+      border-radius: 999px;
+      padding: 9px 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: var(--gold);
+      color: #111111;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow:
+        0 12px 24px rgba(0, 0, 0, 0.12),
+        0 0 0 1px rgba(0, 0, 0, 0.03);
+      transition: background 0.16s ease, transform 0.08s ease, box-shadow 0.16s ease;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-dark);
+      transform: translateY(-1px);
+      box-shadow:
+        0 16px 34px rgba(0, 0, 0, 0.18),
+        0 0 0 1px rgba(0, 0, 0, 0.04);
+    }
+
+    .btn-primary:disabled {
+      cursor: not-allowed;
+      background: #ddd0a2;
+      box-shadow: none;
+      transform: none;
+      opacity: 0.85;
+    }
+
+    .btn-spinner {
+      border-radius: 999px;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(0, 0, 0, 0.25);
+      border-top-color: #111111;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .alert {
+      margin-top: 12px;
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alert-success {
+      background: rgba(42, 157, 143, 0.08);
+      color: var(--success);
+      border: 1px solid rgba(42, 157, 143, 0.25);
+    }
+
+    .alert-error {
+      background: rgba(230, 57, 70, 0.06);
+      color: var(--error);
+      border: 1px solid rgba(230, 57, 70, 0.32);
+    }
+  </style>
+</head>
+<body>
+  <div class="support-wrapper">
+    <div class="support-card">
+      <div class="support-header">
+        <div>
+          <div class="support-title">Neurasics Support</div>
+          <p class="support-subtitle">
+            Tell us what went wrong &mdash; attach a screenshot or recording if you can.
+            We&rsquo;ll create a ticket in our helpdesk and get back to you.
+          </p>
+        </div>
+        <div class="support-badge">
+          <span class="support-badge-dot"></span>
+          <span>AI Platform • 24×7</span>
+        </div>
+      </div>
+
+      <form id="supportForm">
+        <!-- LEFT COLUMN -->
+        <div class="field-group">
+          <div class="field-group-half">
+            <div class="field">
+              <div class="field-label-row">
+                <label for="name">Name<span class="required-dot">*</span></label>
+              </div>
+              <input id="name" name="name" type="text" placeholder="Your name" required />
+            </div>
+            <div class="field">
+              <div class="field-label-row">
+                <label for="email">Email<span class="required-dot">*</span></label>
+              </div>
+              <input id="email" name="email" type="email" placeholder="you@company.com" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="field-label-row">
+              <label for="accountId">Account / User ID</label>
+              <span class="field-hint">Optional &mdash; helps us find your workspace</span>
+            </div>
+            <input id="accountId" name="accountId" type="text" placeholder="e.g. org_12345" />
+          </div>
+
+          <div class="field-group-half">
+            <div class="field">
+              <div class="field-label-row">
+                <label for="category">Category<span class="required-dot">*</span></label>
+              </div>
+              <select id="category" name="category" required>
+                <option value="">Select...</option>
+                <option value="AI Response Issue">AI Response Issue</option>
+                <option value="Payment / Billing">Payment / Billing</option>
+                <option value="Bug / Technical Issue">Bug / Technical Issue</option>
+                <option value="Feature Request">Feature Request</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <div class="field-label-row">
+                <label for="issueType">Type<span class="required-dot">*</span></label>
+              </div>
+              <select id="issueType" name="issueType" required>
+                <option value="">Select...</option>
+                <option value="type1">type1</option>
+                <option value="type2">type2</option>
+                <option value="type3">type3</option>
+                <option value="type4">type4</option>
+                <option value="type5">type5</option>
+                <option value="type6">type6</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="field-label-row">
+              <label for="priority">Priority</label>
+            </div>
+            <select id="priority" name="priority">
+              <option value="High" selected>High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+              <option value="Urgent">Urgent</option>
+            </select>
+            <div class="pill-row">
+              <span class="pill pill-strong">High: broken flows, invalid AI outputs</span>
+              <span class="pill">Medium: UX issues, minor bugs</span>
+              <span class="pill">Low: suggestions &amp; feedback</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="field-group">
+          <div class="field">
+            <div class="field-label-row">
+              <label for="subject">Subject<span class="required-dot">*</span></label>
+            </div>
+            <input id="subject" name="subject" type="text" placeholder="Short title for this issue" required />
+          </div>
+
+          <div class="field">
+            <div class="field-label-row">
+              <label for="description">Description<span class="required-dot">*</span></label>
+              <span class="field-hint">Share exact steps, prompts, or URLs if possible</span>
+            </div>
+            <textarea id="description" name="description" required placeholder="Describe what happened..."></textarea>
+          </div>
+
+          <div class="field">
+            <div class="field-label-row">
+              <label>Media (Screenshot / Screen Recording)</label>
+            </div>
+            <label class="file-drop" for="attachments">
+              <div class="file-drop-title">Attach files</div>
+              <div class="file-drop-subtitle">
+                Drag & drop or click to browse &middot; PNG, JPG, MP4 (max few files)
+              </div>
+            </label>
+            <input
+              id="attachments"
+              name="attachments"
+              type="file"
+              class="file-input"
+              accept="image/*,video/*"
+              multiple
+            />
+            <div id="fileList" class="file-list"></div>
+          </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer-row">
+          <div>
+            <p class="status-text">
+              By submitting, a ticket will be created in our helpdesk. You&rsquo;ll receive updates on
+              <strong>your email</strong>.
+            </p>
+            <div id="feedback" aria-live="polite"></div>
+          </div>
+          <button type="submit" class="btn-primary" id="submitBtn">
+            <span>Submit Ticket</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("supportForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const feedback = document.getElementById("feedback");
+    const attachmentsInput = document.getElementById("attachments");
+    const fileList = document.getElementById("fileList");
+
+    attachmentsInput.addEventListener("change", () => {
+      const files = Array.from(attachmentsInput.files || []);
+      if (!files.length) {
+        fileList.textContent = "";
+        return;
+      }
+      const names = files.map(f => `${f.name} (${(f.size / 1024 / 1024).toFixed(1)} MB)`);
+      fileList.textContent = names.join(", ");
+    });
+
+    function setSubmitting(isSubmitting) {
+      if (isSubmitting) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<div class="btn-spinner"></div><span>Submitting...</span>';
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = "<span>Submit Ticket</span>";
+      }
+    }
+
+    function showFeedback(type, message) {
+      feedback.innerHTML = "";
+      if (!message) return;
+      const div = document.createElement("div");
+      div.className = "alert " + (type === "success" ? "alert-success" : "alert-error");
+      div.textContent = message;
+      feedback.appendChild(div);
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      showFeedback("", "");
+      setSubmitting(true);
+
+      try {
+        const fd = new FormData();
+        fd.append("name", document.getElementById("name").value.trim());
+        fd.append("email", document.getElementById("email").value.trim());
+        fd.append("accountId", document.getElementById("accountId").value.trim());
+        fd.append("category", document.getElementById("category").value);
+        fd.append("issueType", document.getElementById("issueType").value);
+        fd.append("priority", document.getElementById("priority").value);
+        fd.append("subject", document.getElementById("subject").value.trim());
+        fd.append("description", document.getElementById("description").value.trim());
+
+        // Auto meta
+        fd.append("pageUrl", window.location.href);
+        fd.append("userAgent", navigator.userAgent);
+
+        // Attach files
+        const files = Array.from(attachmentsInput.files || []);
+        for (const file of files) {
+          fd.append("attachments", file); // backend expects 'attachments' as list
+        }
+
+        // Use relative URL if frontend is served from same origin, otherwise use full URL
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+          ? 'http://127.0.0.1:8000'
+          : ''; // Use relative path in production
+
+        const resp = await fetch(`${API_URL}/api/support/tickets`, {
+          method: "POST",
+          body: fd,
+        });
+
+        const data = await resp.json().catch(() => ({}));
+
+        if (!resp.ok || !data.success) {
+          const msg = data.error || "Failed to create ticket. Please try again.";
+          showFeedback("error", msg);
+        } else {
+          const ticketNo = data.ticketNumber || data.ticketId || "created";
+          showFeedback("success", `Ticket ${ticketNo} created successfully. We’ll reach out via email.`);
+          form.reset();
+          fileList.textContent = "";
+        }
+      } catch (err) {
+        console.error(err);
+        showFeedback("error", "Unexpected error while submitting the ticket.");
+      } finally {
+        setSubmitting(false);
+      }
+    });
+  </script>
+</body>
+</html>
